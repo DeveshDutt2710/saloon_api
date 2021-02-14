@@ -16,3 +16,11 @@ COUPON_TYPE = (
     (COUPON_TYPE_FLAT, "Flat"),
     (COUPON_TYPE_PERCENT, "Percent")
 )
+
+PRODUCT_TYPE_PRODUCT = "product"
+PRODUCT_TYPE_SERVICE = 'service'
+
+PRODUCT_TYPES = (
+    (PRODUCT_TYPE_PRODUCT, "Product"),
+    (PRODUCT_TYPE_SERVICE, "Service")
+)

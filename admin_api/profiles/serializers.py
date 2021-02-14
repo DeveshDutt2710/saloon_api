@@ -19,7 +19,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         for field in fields:
 
-            if field.field_name in json_fields and data[field.field_name] is not None:
+            if field.field_name == "myCoupons" and data[field.field_name] is not None:
+                data[field.field_name] = json.loads(data[field.field_name])
+
+            elif field.field_name in json_fields and data[field.field_name] is not None:
                 data[field.field_name] = dict(eval(data[field.field_name]))
 
             if data[field.field_name] is None:
