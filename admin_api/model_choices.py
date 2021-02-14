@@ -1,0 +1,18 @@
+PROFILE_TYPE_VENDOR = "vendor"
+PROFILE_TYPE_CUSTOMER = 'customer'
+PROFILE_TYPE_ADMIN = 'admin'
+
+PROFILE_TYPE = (
+    (PROFILE_TYPE_VENDOR, "Vendor"),
+    (PROFILE_TYPE_CUSTOMER, "Customer"),
+    (PROFILE_TYPE_ADMIN, "Admin")
+)
+
+
+COUPON_TYPE_FLAT = "flat"
+COUPON_TYPE_PERCENT = 'percent'
+
+COUPON_TYPE = (
+    (COUPON_TYPE_FLAT, "Flat"),
+    (COUPON_TYPE_PERCENT, "Percent")
+)
