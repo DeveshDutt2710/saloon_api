@@ -128,3 +128,57 @@ class Products(models.Model):
         self.updatedAt = current_time
 
         super(Products, self).save(*args, **kwargs)
+
+class Enquiries(models.Model):
+    objects = models.DjongoManager()
+
+    _id = models.ObjectIdField()
+    profileId = models.TextField()
+    productId = models.TextField()
+    dateCreated = models.DateTimeField(auto_now_add=True)
+
+    status = models.CharField(choices=ENQUIRY_STATUS, max_length=1024, default=ENQUIRY_STATUS_PENDING)
+
+    quantity = models.IntegerField(default=1)
+
+    createdAt = models.DateTimeField()
+    updatedAt = models.DateTimeField()
+
+    is_deleted = models.BooleanField(default=False)
+
+    class Meta:
+        managed = False
+        db_table = 'enquiries'
+
+    @staticmethod
+    def get_object_or_raise_exception(enquiry_id):
+        try:
+            return Enquiries.objects.get(pk=ObjectId(enquiry_id))
+        except Enquiries.DoesNotExist:
+            response = {
+                'success': False,
+                'detail': f'Enquiry with id {enquiry_id} does not exist'
+            }
+            raise InvalidProfileException(response, status_code=status_codes.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def get_object_or_none(enquiry_id):
+        try:
+            return Enquiries.objects.get(pk=ObjectId(enquiry_id))
+        except Enquiries.DoesNotExist:
+            return None
+
+    def delete_enquiry(self):
+        self.is_deleted = True
+        self.save()
+
+    def save(self, *args, **kwargs):
+
+        current_time = datetime.now()
+
+        if not self.createdAt:
+            self.createdAt = current_time
+
+        self.updatedAt = current_time
+
+        super(Enquiries, self).save(*args, **kwargs)
