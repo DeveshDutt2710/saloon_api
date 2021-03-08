@@ -312,3 +312,51 @@ class Payments(models.Model):
     status = models.CharField(choices=PAYMENT_STATUS, max_length=1024, default=PAYMENT_STATUS_PENDING)
     amount = models.IntegerField()
     details = models.TextField()
+
+class Categories(models.Model):
+    objects = models.DjongoManager()
+
+    _id = models.ObjectIdField()
+    name = models.CharField(max_length=255, null=False)
+
+    createdAt = models.DateTimeField()
+    updatedAt = models.DateTimeField()
+
+    is_deleted = models.BooleanField(default=False)
+
+    class Meta:
+        managed = False
+        db_table = 'categories'
+
+    @staticmethod
+    def get_object_or_raise_exception(category_id):
+        try:
+            return Categories.objects.get(pk=ObjectId(category_id))
+        except Categories.DoesNotExist:
+            response = {
+                'success': False,
+                'detail': f'Category with id {category_id} does not exist'
+            }
+            raise InvalidProfileException(response, status_code=status_codes.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def get_object_or_none(category_id):
+        try:
+            return Categories.objects.get(pk=ObjectId(category_id))
+        except Categories.DoesNotExist:
+            return None
+
+    def delete_category(self):
+        self.is_deleted = True
+        self.save()
+
+    def save(self, *args, **kwargs):
+
+        current_time = datetime.now()
+
+        if not self.createdAt:
+            self.createdAt = current_time
+
+        self.updatedAt = current_time
+
+        super(Categories, self).save(*args, **kwargs)
