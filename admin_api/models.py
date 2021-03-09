@@ -360,3 +360,116 @@ class Categories(models.Model):
         self.updatedAt = current_time
 
         super(Categories, self).save(*args, **kwargs)
+
+class MasterProduct(models.Model):
+    objects = models.DjongoManager()
+
+    _id = models.ObjectIdField()
+
+    name = models.TextField(null=True)
+    description = models.TextField(null=True)
+    images = models.JSONField()
+
+    createdAt = models.DateTimeField()
+    updatedAt = models.DateTimeField()
+
+    is_deleted = models.BooleanField(default=False)
+
+    class Meta:
+        managed = False
+        db_table = 'masterProduct'
+
+    @staticmethod
+    def get_object_or_raise_exception(account_id):
+        try:
+            return MasterProduct.objects.get(pk=ObjectId(account_id))
+        except MasterProduct.DoesNotExist:
+            response = {
+                'success': False,
+                'detail': f'MasterProduct with id {account_id} does not exist'
+            }
+            raise InvalidAccountException(response, status_code=status_codes.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def get_object_or_none(account_id):
+        try:
+            return MasterProduct.objects.get(pk=ObjectId(account_id))
+        except MasterProduct.DoesNotExist:
+            return None
+
+    def delete_account(self):
+        self.is_deleted = True
+        self.save()
+
+    def save(self, *args, **kwargs):
+
+        current_time = datetime.now()
+
+        if not self.createdAt:
+            self.createdAt = current_time
+
+        self.updatedAt = current_time
+
+        super(MasterProduct, self).save(*args, **kwargs)
+
+class Account(models.Model):
+    objects = models.DjongoManager()
+
+    _id = models.ObjectIdField()
+
+    googleId = models.TextField(null=True)
+    facebookId = models.TextField(null=True)
+
+    phone = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=100, blank=True, null=True)
+
+    accountPlan = models.TextField(null=True)
+    isEmailVerified = models.BooleanField(default=False)
+    isPasswordSet = models.BooleanField(default=False)
+
+    createdAt = models.DateTimeField()
+    updatedAt = models.DateTimeField()
+
+    is_deleted = models.BooleanField(default=False)
+
+    class Meta:
+        managed = False
+        db_table = 'accounts'
+
+    @staticmethod
+    def get_object_or_raise_exception(account_id):
+        try:
+            return Account.objects.get(pk=ObjectId(account_id))
+        except Account.DoesNotExist:
+            response = {
+                'success': False,
+                'detail': f'Account with id {account_id} does not exist'
+            }
+            raise InvalidAccountException(response, status_code=status_codes.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def get_object_or_none(account_id):
+        try:
+            return Account.objects.get(pk=ObjectId(account_id))
+        except Account.DoesNotExist:
+            return None
+
+    def delete_account(self):
+        self.is_deleted = True
+        self.save()
+
+    def save(self, *args, **kwargs):
+
+        current_time = datetime.now()
+
+        if not self.createdAt:
+            self.createdAt = current_time
+
+        self.updatedAt = current_time
+
+        super(Account, self).save(*args, **kwargs)
+
+class UserCoupons(models.Model):
+    _id = models.ObjectIdField()
+    used = models.BooleanField(default=False)
+    orderId = models.TextField()

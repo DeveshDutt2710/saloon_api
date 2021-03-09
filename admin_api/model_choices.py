@@ -8,7 +8,6 @@ PROFILE_TYPE = (
     (PROFILE_TYPE_ADMIN, "Admin")
 )
 
-
 COUPON_TYPE_FLAT = "flat"
 COUPON_TYPE_PERCENT = 'percent'
 
