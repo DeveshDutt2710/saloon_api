@@ -10,14 +10,13 @@ class Profiles(models.Model):
 
     _id = models.ObjectIdField(primary_key=True)
     name = models.CharField(max_length=255, null=False)
-    profileType = models.CharField(choices=COUPON_TYPE, max_length=1024, default=COUPON_TYPE_FLAT)
+    profileType = models.CharField(choices=PROFILE_TYPE, max_length=1024, default=PROFILE_TYPE_CUSTOMER)
 
     vendorDescription = models.TextField(null=True)
     contact = models.JSONField()
 
     address = models.JSONField()
 
-    privacySetting = models.JSONField()
 
     dob = models.DateTimeField()
 
@@ -69,6 +68,14 @@ class Profiles(models.Model):
         self.updatedAt = current_time
 
         super(Profiles, self).save(*args, **kwargs)
+        return self._id
+    
+    def update(self, *args, **kwargs):
+
+        self.updatedAt = datetime.now()
+        print("TESTING")
+        super(Profiles, self).update(*args, **kwargs)
+
 
 
 class Products(models.Model):

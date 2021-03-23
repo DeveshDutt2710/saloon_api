@@ -4,6 +4,8 @@ from .serializers import ProfileSerializer
 from ..serializers import BsonSerializer
 from ..models import Profiles
 from djongo.models.fields import ObjectId
+from datetime import datetime
+
 
 
 class ProfileImpl(ProfileManager):
@@ -55,28 +57,34 @@ class ProfileImpl(ProfileManager):
         return response
 
     def create_profile(self, data) -> dict:
-        my_coupons = data.pop('myCoupons') if 'myCoupons' in data else []
-        self._replace_id_to_object_ids_for_user_coupons(my_coupons)
-        data['myCoupons'] = my_coupons
+        #my_coupons = data.pop('myCoupons') if 'myCoupons' in data else []
+        #self._replace_id_to_object_ids_for_user_coupons(my_coupons)
+        #data['myCoupons'] = my_coupons
 
-        Profiles(**data).save()
+        data = Profiles(**data).save()
 
         response = {
             'success': True,
+            'profile_id' : str(data)
         }
 
         return response
 
     def update_profile(self, data) -> dict:
-        my_coupons = data.pop('myCoupons') if 'myCoupons' in data else []
-        self._replace_id_to_object_ids_for_user_coupons(my_coupons)
-        data['myCoupons'] = my_coupons
+        #my_coupons = data.pop('myCoupons') if 'myCoupons' in data else []
+        #self._replace_id_to_object_ids_for_user_coupons(my_coupons)
+        #data['myCoupons'] = my_coupons
+        print(type(data))
+        data['updatedAt'] = datetime.now()
 
-        Profiles.objects.filter(pk=ObjectId(self.get_profile_id())).update(**data)
+        filtered_profile = Profiles.objects.filter(pk=ObjectId(self.get_profile_id()))
+        filtered_profile.update(**data)
 
         response = {
             'success': True,
+            'profile_id' : str(self.get_profile_id())
         }
+
 
         return response
 

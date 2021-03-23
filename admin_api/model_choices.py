@@ -3,9 +3,9 @@ PROFILE_TYPE_CUSTOMER = 'customer'
 PROFILE_TYPE_ADMIN = 'admin'
 
 PROFILE_TYPE = (
-    (PROFILE_TYPE_VENDOR, "Vendor"),
-    (PROFILE_TYPE_CUSTOMER, "Customer"),
-    (PROFILE_TYPE_ADMIN, "Admin")
+    (PROFILE_TYPE_VENDOR, "vendor"),
+    (PROFILE_TYPE_CUSTOMER, "customer"),
+    (PROFILE_TYPE_ADMIN, "admin")
 )
 
 COUPON_TYPE_FLAT = "flat"
